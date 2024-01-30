@@ -25,3 +25,8 @@ With a good cryptor and better shellcode encoding, there's surely something to b
 4.  Compile in x64 debug mode.
     
 5.  Voilà.
+
+
+# :)
+
+I'll keep maintaining this project on my spare time so come check for new updates!! 

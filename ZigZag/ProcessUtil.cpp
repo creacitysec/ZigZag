@@ -19,7 +19,6 @@ DWORD GetSelectedProcessId() {
 
         
         for (unsigned int i = 0; i < cProcesses; i++) {
-            if (!IsSystemProcess(aProcesses[i])) {
                 processIds.push_back(aProcesses[i]);
 
                 
@@ -41,7 +40,7 @@ DWORD GetSelectedProcessId() {
                 }
 
                 CloseHandle(hProcess);
-            }
+            
         }
 
         
@@ -53,34 +52,4 @@ DWORD GetSelectedProcessId() {
 
     
     return 0;
-}
-
-
-bool IsSystemProcess(DWORD processId) {
-    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, processId);
-    if (hProcess) {
-        HANDLE hToken;
-        if (OpenProcessToken(hProcess, TOKEN_QUERY, &hToken)) {
-            TOKEN_USER tokenUser;
-            DWORD dwReturnLength;
-
-            if (GetTokenInformation(hToken, TokenUser, &tokenUser, sizeof(TOKEN_USER), &dwReturnLength)) {
-                SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
-                PSID pSid = tokenUser.User.Sid;
-
-                
-                if (memcmp(GetSidIdentifierAuthority(pSid), &NtAuthority, sizeof(SID_IDENTIFIER_AUTHORITY)) == 0) {
-                    CloseHandle(hToken);
-                    CloseHandle(hProcess);
-                    return true;
-                }
-            }
-
-            CloseHandle(hToken);
-        }
-
-        CloseHandle(hProcess);
-    }
-
-    return false;
 }
